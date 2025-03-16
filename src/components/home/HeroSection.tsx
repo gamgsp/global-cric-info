@@ -2,81 +2,84 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { ChevronRight, Cricket } from "lucide-react";
 
 export function HeroSection() {
   const [isLoaded, setIsLoaded] = useState(false);
-
+  
   useEffect(() => {
-    // Trigger animations after component mounts
-    setIsLoaded(true);
+    // Set loaded after a short delay for animation effect
+    const timer = setTimeout(() => {
+      setIsLoaded(true);
+    }, 100);
+    
+    return () => clearTimeout(timer);
   }, []);
   
   return (
-    <section className="hero-section min-h-[70vh] flex items-center relative overflow-hidden">
-      {/* Background animated pattern */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute inset-0 bg-cricket-navy bg-opacity-80 z-0"></div>
-        
-        <div className="absolute w-full h-full opacity-20">
-          <div className="cricket-ball animate-bounce-light absolute h-16 w-16 rounded-full bg-gradient-to-r from-red-600 to-red-500 top-[20%] right-[10%]"></div>
-          <div className="cricket-ball animate-bounce-light absolute h-10 w-10 rounded-full bg-gradient-to-r from-red-600 to-red-500 top-[60%] left-[15%]" style={{ animationDelay: "1s" }}></div>
-          <div className="cricket-ball animate-bounce-light absolute h-8 w-8 rounded-full bg-gradient-to-r from-red-600 to-red-500 top-[30%] left-[40%]" style={{ animationDelay: "0.5s" }}></div>
-          <div className="cricket-ball animate-bounce-light absolute h-20 w-20 rounded-full bg-gradient-to-r from-red-600 to-red-500 top-[70%] right-[30%]" style={{ animationDelay: "1.5s" }}></div>
-        </div>
-        
-        {/* Cricket stumps and bats pattern */}
-        <div className="absolute inset-0 bg-cricket-pattern bg-repeat opacity-5 z-0"></div>
-        
-        {/* Wave effect at bottom */}
-        <div className="hero-waves">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" className="w-full">
-            <path 
-              fill="#f8fafc" 
-              fillOpacity="1" 
-              d="M0,256L48,245.3C96,235,192,213,288,202.7C384,192,480,192,576,208C672,224,768,256,864,250.7C960,245,1056,203,1152,186.7C1248,171,1344,181,1392,186.7L1440,192L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
-            ></path>
-          </svg>
+    <section className="relative overflow-hidden bg-gradient-to-r from-cricket-blue to-cricket-darkBlue text-white">
+      {/* Animated cricket ball elements */}
+      <div className="absolute top-1/4 left-10 w-12 h-12 rounded-full bg-cricket-red opacity-20 animate-bounce-slow" style={{ animationDelay: "0.5s" }}></div>
+      <div className="absolute bottom-1/3 right-20 w-8 h-8 rounded-full bg-cricket-red opacity-30 animate-bounce-slow" style={{ animationDelay: "1.2s" }}></div>
+      <div className="absolute top-2/3 left-1/4 w-6 h-6 rounded-full bg-cricket-red opacity-25 animate-bounce-slow" style={{ animationDelay: "0.8s" }}></div>
+      
+      {/* Cricket bat silhouette */}
+      <div className="absolute bottom-0 right-10 w-20 h-60 opacity-10 animate-bat-swing">
+        <svg viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3.05,17.05a1,1,0,0,0,1.41,0l9.9-9.9,4.24,4.24a1,1,0,0,0,1.41,0l3.54-3.54a1,1,0,0,0,0-1.41L19.2,2.1a1,1,0,0,0-1.41,0L14.25,5.64a1,1,0,0,0,0,1.41l4.24,4.24-9.9,9.9A1,1,0,0,0,9.19,20a1,1,0,0,0,1.41,0L17.9,12.7l-4.24-4.24,2.12-2.12,4.24,4.24-2.12,2.12-1.41-1.41L9.19,18.46a1,1,0,0,0,0,1.41,1,1,0,0,0,1.41,0l7.07-7.07a1,1,0,0,0,0-1.41L13.5,7.14,18.46,2.18,21.83,5.54,18.46,8.9l-4.24-4.24L8.9,10a1,1,0,0,0,0,1.41,1,1,0,0,0,1.41,0l5.31-5.31,2.83,2.83L16.6,10.88,13.77,8.05l-1.42,1.41,4.24,4.24,1.42-1.41L15.18,9.46l2.12-2.12-2.83-2.83,2.12-2.12,2.83,2.83L17.31,7.34l4.24,4.24a1,1,0,0,0,1.41,0,1,1,0,0,0,0-1.41L18.78,6,21.6,3.15,22.31,2.44a2,2,0,0,0,0-2.83,2,2,0,0,0-2.83,0l-.71.71L15.93,3.15,11.7,7.38,3.05,16a1,1,0,0,0,0,1.41A1,1,0,0,0,4.46,18l7.07-7.07-1.41-1.41L3.05,16.64A1,1,0,0,0,3.05,17.05Z" />
+        </svg>
+      </div>
+      
+      {/* Main content */}
+      <div className="container mx-auto px-4 py-16 md:py-24 relative z-10">
+        <div className="max-w-3xl mx-auto text-center space-y-6">
+          <img 
+            src="/lovable-uploads/71a86eef-5979-40e7-b83d-94104f319e76.png" 
+            alt="Global Cric Info" 
+            className={`w-32 h-32 mx-auto mb-6 ${isLoaded ? 'animate-fade-in' : 'opacity-0'}`}
+            style={{ animationDelay: "0.1s" }}
+          />
+          
+          <h1 
+            className={`text-4xl md:text-6xl font-bold leading-tight ${isLoaded ? 'animate-fade-in' : 'opacity-0'}`}
+            style={{ animationDelay: "0.3s" }}
+          >
+            Your Ultimate Source for Cricket News
+          </h1>
+          
+          <p 
+            className={`text-lg md:text-xl text-gray-200 max-w-2xl mx-auto ${isLoaded ? 'animate-fade-in' : 'opacity-0'}`}
+            style={{ animationDelay: "0.5s" }}
+          >
+            Stay updated with the latest cricket news, match updates, player profiles, and expert analysis from around the world.
+          </p>
+          
+          <div 
+            className={`flex flex-col sm:flex-row gap-4 justify-center mt-8 ${isLoaded ? 'animate-fade-in' : 'opacity-0'}`}
+            style={{ animationDelay: "0.7s" }}
+          >
+            <Button asChild size="lg" className="bg-cricket-red hover:bg-cricket-red/90">
+              <Link to="/news">
+                Latest News
+                <ChevronRight className="ml-2 h-4 w-4" />
+              </Link>
+            </Button>
+            
+            <Button asChild variant="outline" size="lg" className="bg-white/10 backdrop-blur-sm hover:bg-white/20 border-white/20">
+              <a href="#featured">
+                Featured Stories
+                <ChevronRight className="ml-2 h-4 w-4" />
+              </a>
+            </Button>
+          </div>
         </div>
       </div>
       
-      <div className="container mx-auto px-4 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-          <div className={`text-white space-y-6 transition-all duration-700 ${isLoaded ? 'translate-x-0 opacity-100' : '-translate-x-10 opacity-0'}`}>
-            <div className="inline-block bg-gradient-to-r from-cricket-accent to-cricket-lightBlue bg-opacity-80 rounded-full px-3 py-1 text-sm font-medium backdrop-blur-sm">
-              Breaking Cricket News
-            </div>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
-              Your Ultimate Source for Cricket Updates
-            </h1>
-            <p className="text-lg md:text-xl text-gray-100 max-w-lg">
-              Stay informed with the latest cricket news, match updates, player profiles, and in-depth analysis from around the world.
-            </p>
-            <div className="flex flex-wrap gap-4 pt-2">
-              <Button className="bg-cricket-accent hover:bg-cricket-accent/90 text-white rounded-full px-6 py-2">
-                Live Scores
-              </Button>
-              <Button variant="outline" className="border-white text-white hover:bg-white/10 rounded-full px-6 py-2">
-                Latest News
-              </Button>
-            </div>
-          </div>
-          
-          <div className={`transition-all duration-700 delay-300 ${isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
-            <div className="relative w-full max-w-md mx-auto">
-              {/* Circular logo highlight */}
-              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-cricket-accent to-cricket-lightBlue opacity-20 blur-2xl animate-pulse-subtle"></div>
-              
-              {/* Logo */}
-              <div className="relative shine">
-                <img 
-                  src="/lovable-uploads/6b9bd336-611b-4538-abc8-ae02d6d58334.png" 
-                  alt="Global Cric Info" 
-                  className="w-full h-auto drop-shadow-xl"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
+      {/* Wave SVG at bottom */}
+      <div className="absolute bottom-0 left-0 right-0">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 100" fill="#ffffff">
+          <path d="M0,64L80,69.3C160,75,320,85,480,80C640,75,800,53,960,48C1120,43,1280,53,1360,58.7L1440,64L1440,100L1360,100C1280,100,1120,100,960,100C800,100,640,100,480,100C320,100,160,100,80,100L0,100Z"></path>
+        </svg>
       </div>
     </section>
   );

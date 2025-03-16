@@ -46,6 +46,41 @@ const rssFeeds: RssFeed[] = [
     category: 'news',
     refreshInterval: 60,
   },
+  {
+    id: 'bcci-news',
+    name: 'BCCI News',
+    url: 'https://www.bcci.tv/rss/news',
+    category: 'news',
+    refreshInterval: 60,
+  },
+  {
+    id: 'wisden',
+    name: 'Wisden',
+    url: 'https://www.wisden.com/feed',
+    category: 'analysis',
+    refreshInterval: 120,
+  },
+  {
+    id: 'cricket-addictor',
+    name: 'Cricket Addictor',
+    url: 'https://cricketaddictor.com/feed/',
+    category: 'news',
+    refreshInterval: 60,
+  },
+  {
+    id: 'cricket-world',
+    name: 'Cricket World',
+    url: 'https://www.cricketworld.com/rss/news.xml',
+    category: 'news',
+    refreshInterval: 60,
+  },
+  {
+    id: 'ecb',
+    name: 'England Cricket Board',
+    url: 'https://www.ecb.co.uk/england/men/news/rss',
+    category: 'news',
+    refreshInterval: 120,
+  }
 ];
 
 export default rssFeeds;
