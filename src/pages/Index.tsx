@@ -18,11 +18,13 @@ import AdUnit from "@/components/ads/AdUnit";
 const Index = () => {
   const [newsItems, setNewsItems] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [hasError, setHasError] = useState(false);
 
   // Fetch RSS feeds on component mount
   useEffect(() => {
     const fetchFeeds = async () => {
       setIsLoading(true);
+      setHasError(false);
       try {
         // Fetch from all configured RSS feeds
         const allPromises = rssFeeds.map(feed => 
@@ -39,6 +41,15 @@ const Index = () => {
           .filter(Boolean) // Remove null results
           .flatMap(result => result?.items || []);
         
+        if (allItems.length === 0) {
+          setHasError(true);
+          toast({
+            title: "No news content available",
+            description: "We couldn't load any news content. Using fallback data.",
+            variant: "destructive"
+          });
+        }
+        
         // Sort by publication date (newest first)
         const sortedItems = allItems.sort((a, b) => {
           const dateA = new Date(a.pubDate).getTime();
@@ -50,9 +61,10 @@ const Index = () => {
         setIsLoading(false);
       } catch (error) {
         console.error("Error fetching RSS feeds:", error);
+        setHasError(true);
         toast({
           title: "Error",
-          description: "Failed to load news feeds. Please try again later.",
+          description: "Failed to load news feeds. Using fallback data.",
           variant: "destructive"
         });
         setIsLoading(false);

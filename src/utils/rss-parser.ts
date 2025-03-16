@@ -34,14 +34,14 @@ export interface FetchOptions {
 }
 
 // CORS proxy to bypass CORS issues with RSS feeds
-const CORS_PROXY = 'https://cors-anywhere.herokuapp.com/';
+const CORS_PROXY = 'https://corsproxy.io/?';
 
 // This function fetches and parses an RSS feed
 export async function fetchRssFeed(url: string, options: FetchOptions): Promise<ParsedRssFeed | null> {
   try {
-    // Use a CORS proxy if needed - uncomment if you face CORS issues
-    // const proxyUrl = `${CORS_PROXY}${url}`;
-    const response = await fetch(url);
+    // Use a CORS proxy to bypass CORS issues
+    const proxyUrl = `${CORS_PROXY}${encodeURIComponent(url)}`;
+    const response = await fetch(proxyUrl);
     
     if (!response.ok) {
       throw new Error(`Failed to fetch RSS feed: ${response.statusText}`);
@@ -98,21 +98,21 @@ export async function fetchRssFeed(url: string, options: FetchOptions): Promise<
         id,
         title: item.querySelector('title')?.textContent || 'No Title',
         link: item.querySelector('link')?.textContent || '',
-        description: item.querySelector('description')?.textContent || '',
-        pubDate: item.querySelector('pubDate')?.textContent || '',
+        description: item.querySelector('description')?.textContent || 'No description available.',
+        pubDate: item.querySelector('pubDate')?.textContent || new Date().toUTCString(),
         creator: item.querySelector('dc\\:creator')?.textContent || 
-                item.querySelector('creator')?.textContent,
+                item.querySelector('creator')?.textContent || 'Unknown',
         categories: Array.from(item.querySelectorAll('category'))
           .map(category => category.textContent || '')
           .filter(Boolean),
         content: item.querySelector('content\\:encoded')?.textContent || 
-                 item.querySelector('encoded')?.textContent,
+                 item.querySelector('encoded')?.textContent || '',
         enclosure: item.querySelector('enclosure') ? {
           url: item.querySelector('enclosure')?.getAttribute('url') || '',
           type: item.querySelector('enclosure')?.getAttribute('type') || '',
           length: parseInt(item.querySelector('enclosure')?.getAttribute('length') || '0')
         } : undefined,
-        imageUrl,
+        imageUrl: imageUrl || '/placeholder.svg',
         sourceId: options.sourceId,
         sourceName: options.sourceName
       };
@@ -129,11 +129,59 @@ export async function fetchRssFeed(url: string, options: FetchOptions): Promise<
     console.error('Error fetching RSS feed:', error);
     toast({
       title: "Error fetching feed",
-      description: `Could not fetch feed from ${url}. Please try again later.`,
+      description: `Could not fetch feed from ${url}. Using fallback data.`,
       variant: "destructive"
     });
-    return null;
+    
+    // Return fallback data instead of null
+    return {
+      title: `${options.sourceName} (Offline)`,
+      description: "Currently unavailable. Using fallback data.",
+      link: "",
+      items: generateFallbackItems(options),
+      lastUpdated: new Date()
+    };
   }
+}
+
+// Create fallback news items when feeds fail to load
+function generateFallbackItems(options: FetchOptions): RssItem[] {
+  const baseItems = [
+    {
+      title: "Cricket Australia announces upcoming series with India",
+      description: "A thrilling five-match test series has been scheduled between Australia and India for the upcoming season."
+    },
+    {
+      title: "England's new bowling strategy pays off in recent matches",
+      description: "The England cricket team has shown remarkable improvement with their new bowling approach."
+    },
+    {
+      title: "ICC announces changes to T20 World Cup format",
+      description: "The International Cricket Council revealed modifications to the tournament structure for better competitive balance."
+    },
+    {
+      title: "Rising star batsman breaks record in domestic league",
+      description: "The 19-year-old prodigy scored a double century in his debut first-class match."
+    },
+    {
+      title: "West Indies cricket board announces development program",
+      description: "A new grassroots initiative aims to discover and nurture young cricket talent across the Caribbean."
+    }
+  ];
+  
+  return baseItems.map((item, index) => ({
+    id: `fallback-${options.sourceId}-${index}`,
+    title: item.title,
+    link: "#",
+    description: item.description,
+    pubDate: new Date(Date.now() - index * 86400000).toUTCString(), // Stagger dates
+    creator: options.sourceName,
+    categories: ["Cricket", "News"],
+    content: item.description,
+    imageUrl: `/placeholder.svg`,
+    sourceId: options.sourceId,
+    sourceName: `${options.sourceName} (Offline)`
+  }));
 }
 
 // This function formats a pubDate string to a more readable format
@@ -162,6 +210,8 @@ export function formatPubDate(pubDate: string): string {
 
 // This function extracts a short excerpt from the description
 export function getExcerpt(description: string, maxLength: number = 150): string {
+  if (!description) return "No description available.";
+  
   // Remove HTML tags
   const text = description.replace(/<\/?[^>]+(>|$)/g, '');
   
