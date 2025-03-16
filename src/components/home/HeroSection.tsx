@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ChevronRight, Cricket } from "lucide-react";
+import { ChevronRight, Trophy } from "lucide-react";
 
 export function HeroSection() {
   const [isLoaded, setIsLoaded] = useState(false);
