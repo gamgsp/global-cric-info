@@ -11,6 +11,7 @@ export const cricketColors = {
   green: '#2F855A',     // Cricket pitch green
   yellow: '#F6E05E',    // Cricket trophy gold
   cream: '#FFF9C4',     // Cricket whites
+  navy: '#1A365D',      // Navy for backgrounds
 };
 
 export function cn(...inputs: ClassValue[]) {
