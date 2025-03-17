@@ -32,40 +32,52 @@ export function NewsCard({ item, isLoading = false, isFeature = false }: NewsCar
     );
   }
 
+  // Safely handle potentially undefined item properties
+  const safeItem = {
+    ...item,
+    title: item.title || 'No Title',
+    description: item.description || 'No description available.',
+    categories: item.categories || [],
+    link: item.link || '#',
+    imageUrl: item.imageUrl || '/placeholder.svg',
+    pubDate: item.pubDate || new Date().toUTCString(),
+    sourceName: item.sourceName || 'Unknown Source'
+  };
+
   const renderCategoryTag = () => {
-    if (!item.categories || item.categories.length === 0) return null;
+    if (!safeItem.categories || safeItem.categories.length === 0) return null;
     
     return (
       <div className="absolute top-3 left-3 z-10">
         <div className="bg-primary/90 text-primary-foreground text-xs px-2 py-1 rounded-full backdrop-blur-sm">
-          {item.categories[0]}
+          {safeItem.categories[0]}
         </div>
       </div>
     );
   };
 
-  const excerpt = getExcerpt(item.description, isFeature ? 180 : 120);
+  const excerpt = getExcerpt(safeItem.description, isFeature ? 180 : 120);
   
   return (
     <Card className={`news-card news-card-hover group ${isFeature ? 'md:flex' : ''} h-full`}>
       {renderCategoryTag()}
       
       {/* Conditionally render the image only if it exists and hasn't errored */}
-      {item.imageUrl && !imageError ? (
+      {safeItem.imageUrl && !imageError ? (
         <div 
           className={`relative overflow-hidden ${isFeature ? 'md:w-2/5 h-56 md:h-auto' : 'h-48'}`}
         >
           <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent z-0"></div>
           <img 
-            src={item.imageUrl} 
-            alt={item.title} 
+            src={safeItem.imageUrl} 
+            alt={safeItem.title} 
             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
             onError={() => setImageError(true)}
           />
         </div>
       ) : (
         <div 
-          className={`relative overflow-hidden bg-gradient-to-r from-cricket-blue to-cricket-lightBlue ${
+          className={`relative overflow-hidden bg-gradient-to-r from-blue-500 to-blue-700 ${
             isFeature ? 'md:w-2/5 h-56 md:h-auto' : 'h-48'
           }`}
         >
@@ -82,12 +94,12 @@ export function NewsCard({ item, isLoading = false, isFeature = false }: NewsCar
       <div className={`flex flex-col ${isFeature ? 'md:w-3/5' : ''}`}>
         <CardHeader className="pb-2">
           <a 
-            href={item.link} 
+            href={safeItem.link} 
             target="_blank" 
             rel="noopener noreferrer"
             className="font-bold hover:text-primary transition-colors duration-300 line-clamp-2"
           >
-            {item.title}
+            {safeItem.title}
           </a>
         </CardHeader>
         
@@ -99,10 +111,10 @@ export function NewsCard({ item, isLoading = false, isFeature = false }: NewsCar
         
         <CardFooter className="flex justify-between items-center text-xs text-muted-foreground pt-2">
           <div className="flex items-center space-x-1">
-            <span>{formatPubDate(item.pubDate)}</span>
+            <span>{formatPubDate(safeItem.pubDate)}</span>
           </div>
           <div className="text-xs font-medium px-2 py-1 rounded-full bg-secondary">
-            {item.sourceName}
+            {safeItem.sourceName}
           </div>
         </CardFooter>
       </div>
